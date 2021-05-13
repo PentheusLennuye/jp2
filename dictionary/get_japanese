@@ -1,0 +1,10 @@
+#!/bin/bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+
+word=$1
+term=$2
+
+searchterm=".${word}[]|select(.english|contains(\"${term}\"))"
+cat $DIR/${word}.json| jq $searchterm
