@@ -180,7 +180,6 @@ class Card(QDialog):
         self.set_layout()
 
     def show_answer(self):
-        print("Showing answer")
         self.playfield.show_answer()
         if self.index < self.last_question:
             self.controls.set_button(self.button_labels[self.mode])
