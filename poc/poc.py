@@ -1,7 +1,6 @@
 #!/usr/bin/env python3.9
 
-import sys
-from PySide6.QtWidgets import (QApplication, QDialog, QPushButton, QLabel,
+from PySide6.QtWidgets import (QDialog, QPushButton, QLabel,
                                QVBoxLayout, QHBoxLayout, QWidget)
 from PySide6.QtGui import QFont
 from PySide6.QtCore import Qt, Slot, QCoreApplication
@@ -10,7 +9,7 @@ from PySide6.QtCore import Qt, Slot, QCoreApplication
 default_font = QFont()
 default_font.setPointSize(18)
 gloss_font = QFont()
-gloss_font.setPointSize(10)
+gloss_font.setPointSize(9)
 
 h1fontsize = 18
 pfontsize = 14
@@ -133,16 +132,18 @@ class Card(QDialog):
     def __init__(self, title, instructions,
                  questions, answers, parent=None):
         super().__init__(parent)
+        self.questions = questions
+        self.answers = answers
         self.index = 0
         self.mode = POSING_QUESTION
         self.button_labels = ['答え', '次の質問']
-        self.last_question = len(questions) - 1
+        self.last_question = len(self.questions) - 1
         self.setWindowTitle('日本語の練習')
 
         self.title = Title(title, self)
         self.instructions = Instructions(instructions, self)
         self.playfield = Playfield(
-            questions[self.index], answers[self.index], self
+            self.questions[self.index], self.answers[self.index], self
         )
         self.playfield.hide_answer()
         self.controls = Controls(self, self.button_labels[self.mode],
@@ -173,7 +174,7 @@ class Card(QDialog):
         self.index += 1
         self.playfield.setParent(None)
         self.playfield = Playfield(
-            questions[self.index], answers[self.index], self
+            self.questions[self.index], self.answers[self.index], self
         )
         self.playfield.hide_answer()
         self.controls.set_button(self.button_labels[self.mode])
@@ -189,20 +190,3 @@ class Card(QDialog):
     @Slot()
     def quit_me(self):
         QCoreApplication.instance().quit()
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    title = 'Chapter Four, Exercise 2b'
-    instructions = 'Translate into Japanese.'
-    questions = ['The library is behind the university.',
-                 'The hospital is in front of the department store.']
-    answers = [
-            [['図書館', 'としょかん'], ['は', ''], ['大学', 'だいがく'],
-             ['の', ''], ['後ろ', 'うし'], ['です', '']],
-            [['病院', 'びょういん'], ['は', ''], ['デパート', ''],
-             ['の', ''], ['前', 'まえ'], ['です', '']]
-    ]
-    card = Card(title, instructions, questions, answers)
-    card.show()
-    sys.exit(app.exec())
