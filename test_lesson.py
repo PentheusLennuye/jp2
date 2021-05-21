@@ -4,7 +4,7 @@ import sys
 
 from PySide6.QtWidgets import QApplication
 
-from poc.poc import Card
+from lib.card import Card
 
 
 app = QApplication(sys.argv)
